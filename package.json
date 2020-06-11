@@ -1,0 +1,24 @@
+{
+  "name": "phonebookbackend",
+  "version": "0.0.1",
+  "description": "backend for a phonebook",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coodeex/FullstackOsa3.git"
+  },
+  "keywords": [
+    "phone",
+    "book",
+    "phonebook"
+  ],
+  "author": "Juhani Lehto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coodeex/FullstackOsa3/issues"
+  },
+  "homepage": "https://github.com/coodeex/FullstackOsa3#readme"
+}
