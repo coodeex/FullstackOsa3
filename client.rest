@@ -1,18 +1,19 @@
-GET http://localhost:3001/api/persons
+GET https://puhelinluettelo-backendi.herokuapp.com/api/persons
 
 ###
 
-GET http://localhost:3001/api/persons/2
+GET https://puhelinluettelo-backendi.herokuapp.com/api/persons/2
 
 ###
 
-DELETE http://localhost:3001/api/persons/99167
+DELETE https://puhelinluettelo-backendi.herokuapp.com/api/persons/11111
 
 ###
-POST http://localhost:3001/api/persons
+POST https://puhelinluettelo-backendi.herokuapp.com/api/persons
 content-type: application/json
 
 {
-    "name": "asam123",
-    "number": "123"
+    "name": "pena",
+    "number": "10"
 }
+
