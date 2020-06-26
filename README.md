@@ -1,1 +1,1 @@
-https://puhelinluettelo-backendi.herokuapp.com/api/persons
+https://puhelinluettelo-backendi.herokuapp.com
