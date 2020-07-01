@@ -17,3 +17,21 @@ content-type: application/json
     "number": "10"
 }
 
+###
+
+GET http://localhost:3001/
+
+###
+
+GET http://localhost:3001/api/persons
+
+###
+
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "pena",
+    "number": "101"
+}
+
