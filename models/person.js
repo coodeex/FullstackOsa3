@@ -1,12 +1,13 @@
-const mongoose = require('mongoose')
 require('dotenv').config()
+const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const url = process.env.MONGODB_URI
 
-console.log('connecting to', url)
+console.log('connecting to MongoDB')
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => {
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -14,9 +15,17 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   })
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
+  name: {
+    type: String,
+    minlength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    minlength: 8
+  }
 })
+personSchema.plugin(uniqueValidator)
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
@@ -25,5 +34,6 @@ personSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
 
 module.exports = mongoose.model('Person', personSchema)

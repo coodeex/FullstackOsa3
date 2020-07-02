@@ -8,7 +8,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
 app.use(morgan(function (tokens, req, res) {
-  const body = JSON.stringify(req.body) !== "{}" ? JSON.stringify(req.body) : null
+  const body = JSON.stringify(req.body) !== '{}' ? JSON.stringify(req.body) : null
   return [
     tokens.method(req, res),
     tokens.url(req, res),
@@ -21,15 +21,14 @@ app.use(morgan(function (tokens, req, res) {
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
-    persons.map(p => console.log(`${p.name} ${p.number}`))
-    console.log("---------------------------")
+    // persons.map(p => console.log(`${p.name} ${p.number}`))
+    // console.log('---------------------------')
     res.json(persons)
   })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const person = request.body
-  console.log("onks tätä olemassa: ", person)
 
   if (!person.name) {
     return response.status(400).json({
@@ -45,6 +44,7 @@ app.post('/api/persons', (request, response) => {
 
   Person.find({}).then(persons => {
     if (persons.some(p => p.name === person.name)) {
+      console.log('error: \'name must be unique\'')
       return response.status(400).json({
         error: 'name must be unique'
       })
@@ -56,10 +56,9 @@ app.post('/api/persons', (request, response) => {
 
       newPerson.save().then(savedPerson => {
         response.json(savedPerson)
-      })
+      }).catch(error => next(error))
     }
   })
-  console.log("------------------------***")
 })
 
 app.get('/info', (req, res, next) => {
@@ -85,7 +84,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -94,6 +93,12 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const changedPerson = request.body
 
+  if (changedPerson.number.length < 8) {
+    return response.status(400).json({
+      error: 'New number is shorter than the minimum allowed length (8)'
+    })
+  }
+
   const person = {
     name: changedPerson.name,
     number: changedPerson.number
@@ -101,6 +106,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
   Person.findByIdAndUpdate(request.params.id, person, { new: true })
     .then(updatedPerson => {
+      console.log("id on ",request.params.id)
       response.json(updatedPerson.toJSON())
     })
     .catch(error => next(error))
@@ -116,6 +122,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError' && error.kind == 'ObjectId') {
     return response.status(400).send({ error: 'malformatted id' })
+  }else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
   next(error)
 }
