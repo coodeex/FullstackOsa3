@@ -1,5 +1,5 @@
 <h1 align="center">Simple Full Stack Application</h1>
-<br>
+
 ## You can.. 
 
 * filter persons in this phonebook by their name 
